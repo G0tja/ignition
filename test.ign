@@ -1,0 +1,25 @@
+{
+  "ignition": { "version": "3.0.0" },
+  "storage": {
+    "files": [{
+      "path": "/etc/hostname",
+      "mode": 420,
+      "overwrite": true,
+      "contents": { "source": "data:,core1" }
+  }]
+  "passwd": {
+    "users": [
+      {
+        "name": "systemUser",
+        "passwordHash": "$5$Ve4mrFxE$Av29pavuodrM25uq/TA4uGdClWmjVlOOOOovA09avQ1",
+        "sshAuthorizedKeys": [
+          "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBHLcK+rIT6AMqvneMkZcF+KuCRoBtCZQeGnqfJdZigRBT8TLMO86dRnygVK6ASdinIGpPAnV69oanBi6msgROVs= ian@loehndorf.me"
+        ]
+      },
+      {
+        "name": "jenkins",
+        "uid": 1000
+      }
+    ]
+  }
+}
