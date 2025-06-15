@@ -27,7 +27,7 @@
   "systemd": {
     "units": [
       {
-        "contents": "[Unit]\nDescription=Install Docker CE\nWants=network-online.target\nAfter=network-online.target\nBefore=zincati.service\nConditionPathExists=!/var/lib/%N.stamp\n\n[Service]\nType=oneshot\nRemainAfterExit=yes\nExecStart=/usr/bin/curl --output-dir \"/etc/yum.repos.d\" --remote-name https://download.docker.com/linux/fedora/docker-ce.repo\nExecStart=/usr/bin/rpm-ostree override remove moby-engine containerd runc docker-cli --install docker-ce\nExecStart=/usr/bin/touch /var/lib/%N.stamp\nExecStart=/usr/bin/systemctl --no-block reboot\n\n[Install]\nWantedBy=multi-user.target\n",
+        "contents": "[Unit]\nDescription=Install Docker CE\nWants=network-online.target\nAfter=network-online.target\nBefore=zincati.service\nConditionPathExists=!/var/lib/%N.stamp\n\n[Service]\nType=oneshot\nRemainAfterExit=yes\nExecStart=/usr/bin/curl --output-dir \"/etc/yum.repos.d\" --remote-name https://download.docker.com/linux/fedora/docker-ce.repo\nExecStart=/usr/bin/rpm-ostree override remove moby-engine containerd runc docker-cli --install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin\nExecStart=/usr/bin/touch /var/lib/%N.stamp\nExecStart=/usr/bin/systemctl --no-block reboot\n\n[Install]\nWantedBy=multi-user.target\n",
         "enabled": true,
         "name": "rpm-ostree-install-docker-ce.service"
       },
