@@ -1,7 +1,67 @@
 variant: fcos
 version: 1.6.0
+
 passwd:
   users:
     - name: thresh
       ssh_authorized_keys:
         - ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBHLcK+rIT6AMqvneMkZcF+KuCRoBtCZQeGnqfJdZigRBT8TLMO86dRnygVK6ASdinIGpPAnV69oanBi6msgROVs= thresh
+
+systemd:
+  units:
+
+    # Install Docker
+    - name: rpm-ostree-install-docker-ce.services
+      enabled: true
+      contents: |
+          [Unit]
+          Description=Install Docker CE
+          Wants=network-online.target
+          After=network-online.target
+          Before=zincati.service
+          ConditionPathExists=!/var/lib/%N.stamp
+
+          [Service]
+          Type=oneshot
+          RemainAfterExit=yes
+          ExecStart=/usr/bin/curl --output-dir "/etc/yum.repos.d" --remote-name https://download.docker.com/linux/fedora/docker-ce.repo
+          ExecStart=/usr/bin/rpm-ostree override remove moby-engine containerd runc docker-cli --install docker-ce
+          ExecStart=/usr/bin/touch /var/lib/%N.stamp
+          ExecStart=/usr/bin/systemctl --no-block reboot
+
+          [Install]
+          WantedBy=multi-user.target
+
+    # Install vim
+    - name: rpm-ostree-install-vim.service
+      enabled: true
+      contents: |
+        [Unit]
+        Description=Layer vim with rpm-ostree
+        Wants=network-online.target
+        After=network-online.target
+        Before=zincati.service
+        ConditionPathExists=!/var/lib/%N.stamp
+
+        [Service]
+        Type=oneshot
+        RemainAfterExit=yes
+        # `--allow-inactive` ensures that rpm-ostree does not return an error
+        # if the package is already installed. This is useful if the package is
+        # added to the root image in a future Fedora CoreOS release as it will
+        # prevent the service from failing.
+        ExecStart=/usr/bin/rpm-ostree install -y --allow-inactive vim
+        ExecStart=/bin/touch /var/lib/%N.stamp
+        ExecStart=/bin/systemctl --no-block reboot
+
+        [Install]
+        WantedBy=multi-user.target
+
+storage:
+  files:
+    # Set vim as default editor
+    - path: /etc/profile.d/zz-default-editor.sh
+      overwrite: true
+      contents:
+        inline: |
+          export EDITOR=vim
