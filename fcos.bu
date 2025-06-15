@@ -9,9 +9,8 @@ passwd:
 
 systemd:
   units:
-
     # Install Docker
-    - name: rpm-ostree-install-docker-ce.services
+    - name: rpm-ostree-install-docker-ce.service
       enabled: true
       contents: |
         [Unit]
