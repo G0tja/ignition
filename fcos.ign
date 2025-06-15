@@ -1,0 +1,15 @@
+{
+  "ignition": {
+    "version": "3.5.0"
+  },
+  "passwd": {
+    "users": [
+      {
+        "name": "thresh",
+        "sshAuthorizedKeys": [
+          "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBHLcK+rIT6AMqvneMkZcF+KuCRoBtCZQeGnqfJdZigRBT8TLMO86dRnygVK6ASdinIGpPAnV69oanBi6msgROVs= thresh"
+        ]
+      }
+    ]
+  }
+}
