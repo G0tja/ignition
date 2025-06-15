@@ -19,15 +19,31 @@
         "path": "/etc/profile.d/zz-default-editor.sh",
         "contents": {
           "compression": "",
-          "source": "data:,export%20EDITOR%3Dvim"
+          "source": "data:,export%20EDITOR%3Dvim%0A"
         }
+      },
+      {
+        "overwrite": true,
+        "path": "/etc/sudoers.d/thresh",
+        "contents": {
+          "compression": "",
+          "source": "data:,thresh%20ALL%3D(ALL)%20NOPASSWD%3A%20ALL%0A"
+        }
+      },
+      {
+        "path": "/etc/vconsole.conf",
+        "contents": {
+          "compression": "",
+          "source": "data:,KEYMAP%3Dde"
+        },
+        "mode": 420
       }
     ]
   },
   "systemd": {
     "units": [
       {
-        "contents": "[Unit]\nDescription=Layer vim with rpm-ostree\nWants=network-online.target\nAfter=network-online.target\nBefore=zincati.service\nConditionPathExists=!/var/lib/%N.stamp\n\n[Service]\nType=oneshot\nRemainAfterExit=yes\n# `--allow-inactive` ensures that rpm-ostree does not return an error\n# if the package is already installed. This is useful if the package is\n# added to the root image in a future Fedora CoreOS release as it will\n# prevent the service from failing.\nExecStart=/usr/bin/rpm-ostree install -y --allow-inactive vim\nExecStart=/bin/touch /var/lib/%N.stamp\nExecStart=/bin/systemctl --no-block reboot\n\n[Install]\nWantedBy=multi-user.target\n",
+        "contents": "[Unit]\nDescription=Layer vim with rpm-ostree\nWants=network-online.target\nAfter=network-online.target\nBefore=zincati.service\nConditionPathExists=!/var/lib/%N.stamp\n\n[Service]\nType=oneshot\nRemainAfterExit=yes\n# `--allow-inactive` ensures that rpm-ostree does not return an error\n# if the package is already installed. This is useful if the package is\n# added to the root image in a future Fedora CoreOS release as it will\n# prevent the service from failing.\nExecStart=/usr/bin/rpm-ostree install -y --allow-inactive vim podman-compose\nExecStart=/bin/touch /var/lib/%N.stamp\nExecStart=/bin/systemctl --no-block reboot\n\n[Install]\nWantedBy=multi-user.target\n",
         "enabled": true,
         "name": "rpm-ostree-install-vim.service"
       }

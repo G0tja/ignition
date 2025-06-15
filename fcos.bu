@@ -7,6 +7,7 @@ passwd:
       ssh_authorized_keys:
         - ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBHLcK+rIT6AMqvneMkZcF+KuCRoBtCZQeGnqfJdZigRBT8TLMO86dRnygVK6ASdinIGpPAnV69oanBi6msgROVs= thresh
 
+
 systemd:
   units:
     # Install vim
@@ -27,7 +28,7 @@ systemd:
         # if the package is already installed. This is useful if the package is
         # added to the root image in a future Fedora CoreOS release as it will
         # prevent the service from failing.
-        ExecStart=/usr/bin/rpm-ostree install -y --allow-inactive vim
+        ExecStart=/usr/bin/rpm-ostree install -y --allow-inactive vim podman-compose
         ExecStart=/bin/touch /var/lib/%N.stamp
         ExecStart=/bin/systemctl --no-block reboot
 
@@ -42,3 +43,12 @@ storage:
       contents:
         inline: |
           export EDITOR=vim
+    - path: /etc/sudoers.d/thresh
+      overwrite: true
+      contents:
+        inline: |
+          thresh ALL=(ALL) NOPASSWD: ALL
+    - path: /etc/vconsole.conf
+      mode: 0644
+      contents:
+        inline: KEYMAP=de
